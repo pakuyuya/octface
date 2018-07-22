@@ -1,7 +1,10 @@
 <template>
   <div class="gnav">
+    <div class="logo">
+      octface
+    </div>
     <div class="search-wrapper gnav-item">
-      <search/>
+      <searchform/>
     </div>
   </div>
 </template>
@@ -17,10 +20,19 @@ export default {
 
 <style scoped>
 .gnav {
+  display: -webkit-flex;
+  display: flex;
   padding-top: 10px;
   height: 30px;
   padding-bottom: 8px;
   background: #101319;
+}
+
+.logo {
+  padding-left: 20px;
+  padding-top: 4px;
+  font-size: 16px;
+  color: #f0f0e8;
 }
 
 .gnav-item {

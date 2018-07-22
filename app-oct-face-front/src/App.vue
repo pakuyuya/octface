@@ -31,5 +31,7 @@ export default {
 }
 
 .content-wrapper {
+  margin-top: 25px;
+  margin-left: 25px;
 }
 </style>

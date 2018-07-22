@@ -22,22 +22,22 @@ export default new Router({
       component: Search
     },
     {
-      path: '/:user/',
+      path: '/user/:user',
       name: 'User',
       component: User
     },
     {
-      path: '/:user/repositories',
+      path: '/repos/:user/',
       name: 'Repositories',
       component: Repositories
     },
     {
-      path: '/:user/:repos/source',
+      path: '/tree/:user/:repos',
       name: 'SourceTree',
       component: SourceTree
     },
     {
-      path: '/:user/:repos/releases',
+      path: '/releases/:user/:repos',
       name: 'Releases',
       component: Releases
     }

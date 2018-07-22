@@ -1,16 +1,23 @@
 <template>
   <div class="search">
     <div class="control-wrapper">
-      <ul>
-        <li v-on:click="showFirst" class="{{isFirstPage ? 'disabled' : ''}}">&laquo;</li>
-        <li v-on:click="showPrev" class="{{isFirstPage ? 'disabled' : ''}}">&lt;</li>
-        <li v-on:click="showPage(page)" class="{{page === crtPage ? 'active' : ''}}" v-for="page in getShownPages" v-bind:key="page"></li>
-        <li v-on:click="showNext" class="{{isNextPage ? 'active' : ''}}">&gt;</li>
-        <li v-on:click="showNext" class="{{isNextPage ? 'active' : ''}}">&raquo;</li>
+      <ul class="pagenation">
+        <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage }">&laquo;</li>
+        <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage }">&lt;</li>
+        <li v-on:click="showPage(page)" class="pagenation-item page" v-bind:class="{ active: page === crtPage }" v-for="page in getShownPages()" v-bind:key="page">{{ page }}</li>
+        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage }">&gt;</li>
+        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage }">&raquo;</li>
       </ul>
     </div>
     <div class="list">
-      <div class="list-item" v-for="item in items" v-bind:key="item.id"></div>
+      <div class="list-item" v-for="item in items" v-bind:key="item.id">
+        <div class="link">
+          <router-link :to="{path: `/tree/${item.owner.login}/${item.name}`}">{{item.full_name}}</router-link>
+        </div>
+        <div class="list-description">
+          <span>{{ item.description }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -18,26 +25,24 @@
 <script>
 export default {
   name: 'Search',
-  data: () => {
-    return {
-      items: [],
-      count: 0,
-      pagesize: 20,
-      crtPage: 1,
-      from: 1,
-      page: 1,
-      movePagewidth: 11,
-    }
-  },
+  data: () => ({
+    items: [],
+    count: 0,
+    pagesize: 20,
+    crtPage: 1,
+    from: 1,
+    page: 1,
+    movePagewidth: 11
+  }),
   methods: {
     isFirstPage: function () {
-      return page === 1
+      return this.page === 1
     },
     isEndPage: function () {
-      return page === this.getEndIndex()
+      return this.page === this.getEndIndex()
     },
     getEndIndex: function () {
-      return ~~(count/pagesize)+1
+      return ~~(this.count / this.pagesize) + 1
     },
     getShownPages: function () {
       let crt = this.crtPage
@@ -45,24 +50,101 @@ export default {
       let width = this.movePagewidth
       let widthdec = width - 1
 
-      let first = crt - ~~(widthdec/2)
-      let end = crt + ~~(widthdec/2) + (widthdec & 1)
-      
-      if (end > this.getEndIndex) {
+      let first = crt - ~~(widthdec / 2)
+      let end = crt + ~~(widthdec / 2) + (widthdec & 1)
+
+      if (end > this.getEndIndex()) {
+        end = this.getEndIndex()
         first = end - this.movePagewidth - 1
       }
       if (first < 1) {
         first = 1
       }
-      
+      width = end - first + 1
       return Array.from(Array(width), (v, k) => k + first)
     },
+    showFirst: function () {
+      this.showPage(1)
+    },
+    showPrev: function () {
+      this.showPage(Math.max(this.page - 1, 1))
+    },
     showPage: function (page) {
-      // TODO:      
+      // TODO:
+    },
+    showNext: function () {
+      this.showPage(Math.min(this.page + 1, this.getEndIndex()))
+    },
+    showEnd: function () {
+      this.showPage(this.getEndIndex())
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.control-wrapper {
+  height: 32px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.pagenation {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.pagenation-item {
+  display: inline-box;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  text-align: center;
+
+  &:hover {
+    background: $sub1Color;
+    color: $primaryTextColor;
+
+    cursor: pointer;
+  }
+
+  &.disabled {
+    color: $disabledTextColor;
+
+    &:hover {
+      background: transparent;
+      color: $disabledTextColor ;
+
+      cursor: default;
+    }
+  }
+}
+
+.list {
+  margin-top: 8px;
+}
+
+.list-item {
+  display: -webkit-flex;
+  display: flex;
+  line-height:38px;
+  font-size: 16px;
+}
+
+.list-item:not(:first-child) {
+  max-width: 200px;
+  height: 38px;
+  border-top: solid 1px $sub2Color;
+}
+
+.list-description {
+  color: $sub1Color;
+  margin-left: 18px;
+  max-width: 580px;
+  height: 38px;
+  white-space: nowrap;
+}
+
 </style>
