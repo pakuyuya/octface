@@ -1,0 +1,29 @@
+@startuml
+
+[*] --> index
+/index
+/index : home
+
+/index --> /search
+/index --> /repo/username
+
+/search : search repositories
+
+/search --> /repo/username/reponame/tree/branch/path
+
+/repo/username : userrepository
+
+/repo/username --> /repo/username/reponame/tree/branch/path
+/repo/username --> /repo/username/reponame/releases/branch/path
+
+/repo/username/reponame/tree/branch/path : repository view(show files and view source)
+
+/repo/username/reponame/tree/branch/path --> /repo/username/reponame/releases
+/repo/username/reponame/tree/branch/path --> /repo/username/reponame/download/signature
+
+/repo/username/reponame/releases : show releases
+
+/repo/username/reponame/releases --> /repo/username/reponame/download/signature
+/repo/username/reponame/download/signature : download zip
+
+@enduml
