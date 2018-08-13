@@ -1,5 +1,4 @@
 <template>
-  <link rel="stylesheet" href="assets/reset.css"/>
   <div id="app">
     <div class="gnav-wrapper">
       <gnav/>
@@ -11,11 +10,13 @@
 </template>
 
 <script>
-import Gnav from './Gnav';
+import Gnav from './Gnav'
 
 export default {
   name: 'App',
-  components : {Gnav}
+  components: {Gnav},
+  methods: {
+  }
 }
 </script>
 
