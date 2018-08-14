@@ -17,6 +17,7 @@
 
 <script>
 import VueSimpleSuggest from 'vue-simple-suggest'
+import apiSV from '@/service/apiSV'
 
 export default {
   name: 'Search',
