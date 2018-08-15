@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/content/Home'
+import Search from '@/components/content/Search'
 import Releases from '@/components/content/Releases'
 import Repositories from '@/components/content/Repositories'
 import SourceTree from '@/components/content/SourceTree'
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/search/:page',
+      name: 'Search',
+      component: Search
     },
     {
       path: '/:user/',

@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import Search from '@/components/common/Search'
+import Searchform from '@/components/common/Searchform'
 
 export default {
   name: 'Gnav',
-  components: { Search }
+  components: { Searchform }
 }
 </script>
 
