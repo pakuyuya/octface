@@ -1,6 +1,6 @@
 <template>
   <div class="search-form">
-    <input type="search" v-model="text" v-on:keydown,enter="goSearch" class="search-text" placeholder="Search repository or user...">
+    <input type="search" v-model="text" v-on:keydown.enter="goSearch" class="search-text" placeholder="Search repository or user...">
     <button type="button" v-on:click="goSearch" class="search-button">search</button>
   </div>
 </template>
