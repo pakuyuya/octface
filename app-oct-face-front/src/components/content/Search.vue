@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import apiSV from '@/service/apiSV'
+
 export default {
   name: 'Search',
   data: () => ({
@@ -70,7 +72,26 @@ export default {
       this.showPage(Math.max(this.page - 1, 1))
     },
     showPage: function (page) {
-      // TODO:
+      page = page || 1
+      let q = this.$route.query.q || ''
+      if (!q) {
+        return
+      }
+
+      let urlpath = '/search/repositories'
+      let params = {
+        q: q,
+        page: page
+      }
+
+      apiSV.get(urlpath, params)
+        .then((r) => {
+          this.$nextTick(() => {
+            this.items = r.items
+            this.count = r.total_count
+            this.page = page
+          })
+        })
     },
     showNext: function () {
       this.showPage(Math.min(this.page + 1, this.getEndIndex()))

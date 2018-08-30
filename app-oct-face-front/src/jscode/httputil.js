@@ -1,11 +1,10 @@
 
 export default {
+  // object to http query string
+  toQueryString: function (obj) {
+    const ks = Object.keys(obj)
+    const vs = Object.values(obj)
 
-    // object to http query string
-    toQueryString: function(obj) {
-        const ks = obj.keys()
-        const vs = obj.values()
-
-        return ks.map((k, i) => encodeURI(k) + '=' + eoncodeURI(vs[i])).join('&')
-    }
+    return ks.map((k, i) => encodeURI(k) + '=' + encodeURI(vs[i])).join('&')
+  }
 }
