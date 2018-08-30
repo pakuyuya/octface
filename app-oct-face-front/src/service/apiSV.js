@@ -1,7 +1,9 @@
 import config from '@/config/config'
 import axios from 'axios'
 
-import httputil from '@jscode/httputil'
+import httputil from '@/jscode/httputil'
+
+// テストできないつくりだがどうしよう
 
 exports.default = {
   /**
