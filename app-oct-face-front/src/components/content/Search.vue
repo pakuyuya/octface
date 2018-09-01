@@ -1,13 +1,16 @@
 <template>
   <div class="search">
     <div class="control-wrapper">
-      <ul class="pagenation">
+      <ul class="pagenation control-wrapper-item">
         <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&laquo;</li>
         <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&lt;</li>
         <li v-on:click="showPage(p)" class="pagenation-item page" v-bind:class="{ active: p === page }" v-for="p in getShownPages()" v-bind:key="p">{{ p }}</li>
         <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&gt;</li>
         <li v-on:click="showEnd" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&raquo;</li>
       </ul>
+      <div class="indicator control-wrapper-item" v-if="count > 1">
+        found {{ count }} entries.
+      </div>
     </div>
     <div class="list">
       <div class="list-item" v-for="item in items" v-bind:key="item.id">
@@ -66,6 +69,7 @@ export default {
       }
       if (first < 1) {
         first = 1
+        end = Math.min(this.getEndIndex(), this.movePagewidth)
       }
       width = end - first + 1
       return Array.from(Array(width), (v, k) => k + first)
@@ -111,9 +115,15 @@ export default {
 
 <style scoped lang="scss">
 .control-wrapper {
+  display: -webkit-flex;
+  display: flex;
   height: 32px;
   margin-top: 8px;
   margin-bottom: 8px;
+}
+.control-wrapper-item {
+  height: 30px;
+  line-height: 30px;
 }
 .pagenation {
   display: -webkit-flex;
@@ -122,9 +132,7 @@ export default {
 
 .pagenation-item {
   display: inline-box;
-  height: 30px;
   width: 30px;
-  line-height: 30px;
   margin-left: 4px;
   margin-right: 4px;
   vertical-align: middle;
@@ -154,6 +162,11 @@ export default {
       color: $primaryTextColor;
     }
   }
+}
+
+.indicator {
+  margin-left: 20px;
+  color: $sub1Color;
 }
 
 .list {
