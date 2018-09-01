@@ -168,14 +168,15 @@ export default {
 }
 
 .list-item:not(:first-child) {
-  max-width: 200px;
   height: 38px;
   border-top: solid 1px $sub2Color;
 }
 
 .list-link {
-  max-width: 300px;
+  width: 300px;
+  overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .list-description {
@@ -184,6 +185,7 @@ export default {
   max-width: 580px;
   height: 38px;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 </style>
