@@ -2,16 +2,16 @@
   <div class="search">
     <div class="control-wrapper">
       <ul class="pagenation">
-        <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage }">&laquo;</li>
-        <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage }">&lt;</li>
-        <li v-on:click="showPage(page)" class="pagenation-item page" v-bind:class="{ active: page === crtPage }" v-for="page in getShownPages()" v-bind:key="page">{{ page }}</li>
-        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage }">&gt;</li>
-        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage }">&raquo;</li>
+        <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&laquo;</li>
+        <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&lt;</li>
+        <li v-on:click="showPage(p)" class="pagenation-item page" v-bind:class="{ active: p === page }" v-for="p in getShownPages()" v-bind:key="p">{{ p }}</li>
+        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&gt;</li>
+        <li v-on:click="showEnd" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&raquo;</li>
       </ul>
     </div>
     <div class="list">
       <div class="list-item" v-for="item in items" v-bind:key="item.id">
-        <div class="link">
+        <div class="list-link">
           <router-link :to="{path: `/tree/${item.owner.login}/${item.name}`}">{{item.full_name}}</router-link>
         </div>
         <div class="list-description">
@@ -30,12 +30,17 @@ export default {
   data: () => ({
     items: [],
     count: 0,
-    pagesize: 20,
-    crtPage: 1,
+    pagesize: 30,
     from: 1,
     page: 1,
     movePagewidth: 11
   }),
+  beforeMount: function () {
+    this.showPage()
+  },
+  beforeRouteUpdate: function (to, from, next) {
+    this.showPage()
+  },
   methods: {
     isFirstPage: function () {
       return this.page === 1
@@ -47,7 +52,7 @@ export default {
       return ~~(this.count / this.pagesize) + 1
     },
     getShownPages: function () {
-      let crt = this.crtPage
+      let crt = this.page
 
       let width = this.movePagewidth
       let widthdec = width - 1
@@ -87,8 +92,9 @@ export default {
       apiSV.get(urlpath, params)
         .then((r) => {
           this.$nextTick(() => {
-            this.items = r.items
-            this.count = r.total_count
+            let d = r.data
+            this.items = d.items
+            this.count = d.total_count
             this.page = page
           })
         })
@@ -141,6 +147,13 @@ export default {
       cursor: default;
     }
   }
+
+  &.page {
+    &.active {
+      background: $sub1Color;
+      color: $primaryTextColor;
+    }
+  }
 }
 
 .list {
@@ -158,6 +171,11 @@ export default {
   max-width: 200px;
   height: 38px;
   border-top: solid 1px $sub2Color;
+}
+
+.list-link {
+  max-width: 300px;
+  white-space: nowrap;
 }
 
 .list-description {

@@ -1,4 +1,4 @@
-import config from '@/config/config'
+import cfg from '@/config/config'
 import axios from 'axios'
 
 import httputil from '@/jscode/httputil'
@@ -12,7 +12,7 @@ export default {
    * @param params {string} query parameter.
    */
   get: function (urlpath, params) {
-    let apiurl = config.apiserver + (urlpath.startsWith('/') ? '' : '/') + urlpath
+    let apiurl = cfg.default.apiserver + (urlpath.startsWith('/') ? '' : '/') + urlpath
     let query = {}
     for (let v in params) {
       let prevurl = apiurl

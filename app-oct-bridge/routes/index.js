@@ -5,8 +5,8 @@ var config = require('config');
 var request = require('request');
 
 /* GET home page. */
-router.all('/*', function(req, res, next) {
-  let url = req.originalUrl;
+router.all('/api/*', function(req, res, next) {
+  let path = req.originalUrl.replace(new RegExp('^/api/'), '');
 
   let headers = {};
   headers['User-Agent'] = config.get('app-ua');
@@ -14,9 +14,10 @@ router.all('/*', function(req, res, next) {
   
   let reqOpt = {
     headers : headers,
-    url : config.get('url_transfer_to') + req.originalUrl,
+    url : config.get('url_transfer_to') + path,
   };
   reqOpt = withForm(reqOpt, req);
+  console.log(reqOpt)
 
   request(reqOpt).pipe(res);
 });
