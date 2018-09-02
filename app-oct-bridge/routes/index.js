@@ -11,13 +11,12 @@ router.all('/api/*', function(req, res, next) {
   let headers = {};
   headers['User-Agent'] = config.get('app-ua');
   headers = withContentType(headers, req);
-  
+
   let reqOpt = {
     headers : headers,
     url : config.get('url_transfer_to') + path,
   };
   reqOpt = withForm(reqOpt, req);
-  console.log(reqOpt)
 
   request(reqOpt).pipe(res);
 });

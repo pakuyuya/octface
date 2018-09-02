@@ -15,7 +15,7 @@
     <div class="list">
       <div class="list-item" v-for="item in items" v-bind:key="item.id">
         <div class="list-link">
-          <router-link :to="{path: `/tree/${item.owner.login}/${item.name}`}">{{item.full_name}}</router-link>
+          <router-link :to="{path: `/repos/${item.owner.login}/${item.name}/contents/`}">{{item.full_name}}</router-link>
         </div>
         <div class="list-description">
           <span>{{ item.description }}</span>
