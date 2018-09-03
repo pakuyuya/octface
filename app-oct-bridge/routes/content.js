@@ -4,11 +4,9 @@ var router = express.Router();
 var config = require('config');
 var request = require('request');
 
-var apiRouter = require('./api');
-var contentRouter = require('./content');
-
 /* GET home page. */
-router.use('/api', apiRouter);
-router.use('/content', contentRouter);
+router.all('/*', function(req, res, next) {
+  // TODO:
+});
 
 module.exports = router;
