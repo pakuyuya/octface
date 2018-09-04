@@ -4,19 +4,21 @@ var router = express.Router();
 var config = require('config');
 var request = require('request');
 
-/* GET content */
-router.all('/:path*', function(req, res, next) {
-  let path = req.params.path;
+/* download content */
+router.all(new RegExp('/download/(.*)'), function(req, res, next) {
+  let path = req.params[0];
 
+  let headers = {};
   headers['User-Agent'] = config.get('app-ua');
+
   headers = withContentType(headers, req);
 
   let reqOpt = {
     headers : headers,
-    url : config.get('url_pass_content') + path,
+    url : config.get('url_pass_download') + path,
   };
 
-  request(reqOpt).pipe(res);
+  request(reqOpt).pipe(res)
 });
 
 // with header
