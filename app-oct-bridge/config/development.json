@@ -1,3 +1,4 @@
 {
-    "url_transfer_to" : "https://api.github.com/"
+    "url_pass_api" : "https://api.github.com/",
+    "url_pass_content" : "https://github.com/"
 }

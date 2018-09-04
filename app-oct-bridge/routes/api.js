@@ -14,7 +14,7 @@ router.all('/*', function(req, res, next) {
 
   let reqOpt = {
     headers : headers,
-    url : config.get('url_transfer_to') + path,
+    url : config.get('url_pass_api') + path,
   };
   reqOpt = withForm(reqOpt, req);
 
