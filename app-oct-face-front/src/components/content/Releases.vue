@@ -1,33 +1,47 @@
 <template>
   <div class="releases">
-    r
-    <div class="control-wrapper">
-      <ul class="pagenation control-wrapper-item">
-        <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&laquo;</li>
-        <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&lt;</li>
-        <li v-on:click="showPage(p)" class="pagenation-item page" v-bind:class="{ active: p === page }" v-for="p in getShownPages()" v-bind:key="p">{{ p }}</li>
-        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&gt;</li>
-        <li v-on:click="showEnd" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&raquo;</li>
-      </ul>
-      <div class="indicator control-wrapper-item" v-if="count > 1">
-        found {{ count }} entries.
-      </div>
+    <div class="repos-nav">
+      <ReposLocalNav :owner="$route.params.owner" :repos="$route.params.repos"/>
     </div>
-    <div class="release" v-for="release in releases" v-bind:key="release.id">
-      <h3 class="version">{{ release.tag_name }}</h3>
-      <div class="link">
-        <a :href="release.urlzip" download>zip</a>
-        <a :href="release.urltgz" download>tgz</a>
+    <div class="repos-content">
+      <div class="headers">
+        <div class="repos">
+          {{ owner }} / {{ repos }}
+        </div>
+      </div>
+      <div class="control-wrapper">
+        <ul class="pagenation control-wrapper-item">
+          <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&laquo;</li>
+          <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&lt;</li>
+          <li v-on:click="showPage(p)" class="pagenation-item page" v-bind:class="{ active: p === page }" v-for="p in getShownPages()" v-bind:key="p">{{ p }}</li>
+          <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&gt;</li>
+          <li v-on:click="showEnd" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&raquo;</li>
+        </ul>
+        <div class="indicator control-wrapper-item" v-if="count > 1">
+          found {{ count }} entries.
+        </div>
+      </div>
+      <div class="release-wrapper">
+        <div class="release" v-for="release in releases" v-bind:key="release.id">
+          <h3 class="version">{{ release.name }}</h3>
+          <div class="link">
+            <a :href="release.urlzip" download>zip</a>
+            <a :href="release.urltgz" download>tgz</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import ReposLocalNav from '@/components/common/ReposLocalNav'
 import apiSV from '@/service/apiSV'
+import contentSV from '@/service/contentSV'
 
 export default {
   name: 'Releases',
+  components: {ReposLocalNav},
   data: () => ({
     releases: [],
     count: 0,
@@ -91,7 +105,7 @@ export default {
       let owner = this.owner || ''
       let repos = this.repos || ''
 
-      let urlpath = `/repos/${owner}/${repos}/releases`
+      let urlpath = `/repos/${owner}/${repos}/tags`
       let params = {
         page: page
       }
@@ -100,8 +114,8 @@ export default {
         .then((r) => {
           this.$nextTick(() => {
             let d = r.data
-            this.releases = adjustReleases(d.releases)
-            this.count = d.total_count
+            this.releases = this.adjustReleases(d)
+            this.count = d.length
             this.page = page
           })
         })
@@ -111,17 +125,24 @@ export default {
     },
     showEnd: function () {
       this.showPage(this.getEndIndex())
+    },
+    adjustReleases: function (releases) {
+      return releases.map(release => Object.assign(release, {
+        urlzip: contentSV.resolveUrl(`/download/${this.owner}/${this.repos}/zip/${release.name}`),
+        urltgz: contentSV.resolveUrl(`/download/${this.owner}/${this.repos}/tar.gz/${release.name}`)
+      }))
     }
   }
 }
 
-var adjustReleases = function (releases) {
-  return releases.map(release => Object.assign(release, {
-    urlzip: apiSV.resolveUrl(`/content/download/${this.owner}/${this.repos}/zip/${release.tag_name}`),
-    urltgz: apiSV.resolveUrl(`/content/download/${this.owner}/${this.repos}/tar.gz/${release.tag_name}`)
-  }))
-}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.releases {
+  display: -webkit-flex;
+  display: flex;
+}
+.repos-content {
+  margin-left: 10px;
+}
 </style>

@@ -37,6 +37,6 @@ export default {
   },
 
   resolveUrl: function (urlpath) {
-    return cfg.default.apiserver + '/api' + (urlpath.startsWith('/') ? '' : '/') + urlpath
+    return cfg.default.apiserver + '/content' + (urlpath.startsWith('/') ? '' : '/') + urlpath
   }
 }

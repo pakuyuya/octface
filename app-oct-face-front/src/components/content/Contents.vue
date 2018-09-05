@@ -23,7 +23,7 @@
               <li class="files-item" v-if="parentPath !== undefined">
                 <router-link :to="{path: `/repos/${owner}/${repos}/contents/${parentPath}`}">←</router-link>
               </li>
-              <li class="files-item" v-for="file in files" v-bind:key="file.name">
+              <li class="files-item" v-for="file in files" v-bind:key="file.node_id">
                 <span class="files-item-icon">{{ file.icon }}</span>
                 <router-link v-if="file.type === 'dir'"  :to="{path: `/repos/${owner}/${repos}/contents/${file.path}`}">{{file.name}}</router-link>
                 <router-link v-if="file.type === 'file'" :to="{path: `/repos/${owner}/${repos}/contents/${file.path}`}">{{file.name}}</router-link>

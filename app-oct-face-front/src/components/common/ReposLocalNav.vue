@@ -5,7 +5,7 @@
         <router-link :to="{path: `/repos/${owner}/${repos}/contents`}">Source</router-link>
       </li>
       <li class="localnav-item">
-        <router-link :to="{path: '/releases/' + owner + '/' + repos}">Releases</router-link>
+        <router-link :to="{path: `/repos/${owner}/${repos}/releases`}">Releases</router-link>
       </li>
     </ul>
   </div>
