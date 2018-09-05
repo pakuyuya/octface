@@ -12,7 +12,7 @@ export default {
    * @param params {string} query parameter.
    */
   get: function (urlpath, params) {
-    let apiurl = cfg.default.apiserver + (urlpath.startsWith('/') ? '' : '/') + urlpath
+    let apiurl = this.resolveUrl(urlpath)
     let query = {}
     for (let v in params) {
       let prevurl = apiurl
@@ -34,5 +34,9 @@ export default {
     }
 
     return axios.get(fullurl, axiosCfg)
+  },
+
+  resolveUrl: function (urlpath) {
+    return cfg.default.apiserver + (urlpath.startsWith('/') ? '' : '/') + urlpath
   }
 }

@@ -37,7 +37,7 @@ export default new Router({
       component: Contents
     },
     {
-      path: '/releases/:owner/:repos',
+      path: '/repos/:owner/:repos/releases',
       name: 'Releases',
       component: Releases
     }
