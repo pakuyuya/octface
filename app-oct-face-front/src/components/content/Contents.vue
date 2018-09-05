@@ -66,11 +66,11 @@ export default {
     message: ''
   }),
   beforeMount: function () {
-    this.loadUrledSetting(this.$route)
+    this.applyUrledSetting(this.$route)
     this.showContent()
   },
   beforeRouteUpdate: function (to, from, next) {
-    this.loadUrledSetting(to)
+    this.applyUrledSetting(to)
     this.showContent()
     next()
   },
@@ -118,7 +118,7 @@ export default {
           })
         })
     },
-    loadUrledSetting: function (route) {
+    applyUrledSetting: function (route) {
       this.owner = route.params.owner
       this.repos = route.params.repos
       this.path = route.params.path || ''
