@@ -11,3 +11,12 @@ $citationColor: #dedee2;
 $citationTextColor: #333338;
 
 $disabledTextColor:#999999;
+
+
+.icon-loading {
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	top: calc(50% - 12px);
+	left: calc(50% - 12px);
+}

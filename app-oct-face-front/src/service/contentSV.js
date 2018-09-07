@@ -2,6 +2,7 @@ import cfg from '@/config/config'
 import axios from 'axios'
 
 import httputil from '@/jscode/httputil'
+import loading from '@/jsgui/loading'
 
 // テストできないつくりだがどうしよう
 
@@ -33,7 +34,8 @@ export default {
       responseType: 'json'
     }
 
-    return axios.get(fullurl, axiosCfg)
+    loading.start()
+    return axios.get(fullurl, axiosCfg).finally(() => { loading.stop() })
   },
 
   resolveUrl: function (urlpath) {
