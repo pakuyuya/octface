@@ -1,17 +1,6 @@
 <template>
   <div class="search">
-    <div class="control-wrapper">
-      <ul class="pagenation control-wrapper-item">
-        <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&laquo;</li>
-        <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&lt;</li>
-        <li v-on:click="showPage(p)" class="pagenation-item page" v-bind:class="{ active: p === page }" v-for="p in getShownPages()" v-bind:key="p">{{ p }}</li>
-        <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&gt;</li>
-        <li v-on:click="showEnd" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&raquo;</li>
-      </ul>
-      <div class="indicator control-wrapper-item" v-if="count > 1">
-        found {{ count }} entries.
-      </div>
-    </div>
+    <pagination :isFirstPage="isFirstPage()" :isEndPage="isEndPage()" :count="count" :page="page" :movePagewidth="movePagewidth" :pagesize="pagesize" v-on:showPage="requestShowPage" />
     <div class="list">
       <div class="list-item" v-for="item in items" v-bind:key="item.id">
         <div class="list-link">
@@ -26,10 +15,12 @@
 </template>
 
 <script>
+import Pagination from '@/components/common/Pagination'
 import apiSV from '@/service/apiSV'
 
 export default {
   name: 'Search',
+  components: {Pagination},
   data: () => ({
     items: [],
     count: 0,
@@ -39,10 +30,10 @@ export default {
     movePagewidth: 11
   }),
   beforeMount: function () {
-    this.showPage()
+    this.requestShowPage()
   },
   beforeRouteUpdate: function (to, from, next) {
-    this.showPage()
+    this.requestShowPage()
     next()
   },
   methods: {
@@ -74,21 +65,6 @@ export default {
       }
       width = end - first + 1
       return Array.from(Array(width), (v, k) => k + first)
-    },
-    showFirst: function () {
-      this.showPage(1)
-    },
-    showPrev: function () {
-      this.showPage(Math.max(this.page - 1, 1))
-    },
-    showPage: function (page) {
-      this.requestShowPage(page)
-    },
-    showNext: function () {
-      this.showPage(Math.min(this.page + 1, this.getEndIndex()))
-    },
-    showEnd: function () {
-      this.showPage(this.getEndIndex())
     },
 
     requestShowPage: function (page) {
