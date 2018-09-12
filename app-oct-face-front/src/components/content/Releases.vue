@@ -9,24 +9,15 @@
           {{ owner }} / {{ repos }}
         </div>
       </div>
-      <div class="control-wrapper">
-        <ul class="pagenation control-wrapper-item">
-          <li v-on:click="showFirst" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&laquo;</li>
-          <li v-on:click="showPrev" class="pagenation-item cursor" v-bind:class="{ disabled: isFirstPage() }">&lt;</li>
-          <li v-on:click="showPage(p)" class="pagenation-item page" v-bind:class="{ active: p === page }" v-for="p in getShownPages()" v-bind:key="p">{{ p }}</li>
-          <li v-on:click="showNext" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&gt;</li>
-          <li v-on:click="showEnd" class="pagenation-item cursor" v-bind:class="{ disabled: isEndPage() }">&raquo;</li>
-        </ul>
-        <div class="indicator control-wrapper-item" v-if="count > 1">
-          found {{ count }} entries.
-        </div>
-      </div>
+      <pagination :isFirstPage="isFirstPage()" :isEndPage="isEndPage()"
+                  :count="count" :page="page" :movePagewidth="movePagewidth" :pagesize="pagesize" :showCounter="false"
+                  v-on:showPage="requestShowPage"/>
+
       <div class="release-wrapper">
         <div class="release" v-for="release in releases" v-bind:key="release.id">
           <h3 class="version">{{ release.name }}</h3>
           <div class="link">
-            <a :href="release.urlzip" download>zip</a>
-            <a :href="release.urltgz" download>tgz</a>
+            Downloads: <a :href="release.urlzip" download>zip</a> / <a :href="release.urltgz" download>tgz</a>
           </div>
         </div>
       </div>
@@ -36,12 +27,13 @@
 
 <script>
 import ReposLocalNav from '@/components/common/ReposLocalNav'
+import Pagination from '@/components/common/Pagination'
 import apiSV from '@/service/apiSV'
 import contentSV from '@/service/contentSV'
 
 export default {
   name: 'Releases',
-  components: {ReposLocalNav},
+  components: {ReposLocalNav, Pagination},
   data: () => ({
     releases: [],
     count: 0,
@@ -54,11 +46,11 @@ export default {
   }),
   beforeMount: function () {
     this.applyUrledSetting(this.$route)
-    this.showPage()
+    this.requestShowPage()
   },
   beforeRouteUpdate: function (to, from, next) {
     this.applyUrledSetting(to)
-    this.showPage()
+    this.requestShowPage()
   },
   methods: {
     applyUrledSetting: function (route) {
@@ -74,57 +66,28 @@ export default {
     getEndIndex: function () {
       return ~~(this.count / this.pagesize) + 1
     },
-    getShownPages: function () {
-      let crt = this.page
-
-      let width = this.movePagewidth
-      let widthdec = width - 1
-
-      let first = crt - ~~(widthdec / 2)
-      let end = crt + ~~(widthdec / 2) + (widthdec & 1)
-
-      if (end > this.getEndIndex()) {
-        end = this.getEndIndex()
-        first = end - this.movePagewidth - 1
-      }
-      if (first < 1) {
-        first = 1
-        end = Math.min(this.getEndIndex(), this.movePagewidth)
-      }
-      width = end - first + 1
-      return Array.from(Array(width), (v, k) => k + first)
-    },
-    showFirst: function () {
-      this.showPage(1)
-    },
-    showPrev: function () {
-      this.showPage(Math.max(this.page - 1, 1))
-    },
-    showPage: function (page) {
+    requestShowPage: function (page) {
       page = page || 1
-      let owner = this.owner || ''
-      let repos = this.repos || ''
 
-      let urlpath = `/repos/${owner}/${repos}/tags`
-      let params = {
-        page: page
-      }
+      setTimeout(() => {
+        let owner = this.owner || ''
+        let repos = this.repos || ''
 
-      apiSV.get(urlpath, params)
-        .then((r) => {
-          this.$nextTick(() => {
-            let d = r.data
-            this.releases = this.adjustReleases(d)
-            this.count = d.length
-            this.page = page
+        let urlpath = `/repos/${owner}/${repos}/tags`
+        let params = {
+          page: page
+        }
+
+        apiSV.get(urlpath, params)
+          .then((r) => {
+            this.$nextTick(() => {
+              let d = r.data
+              this.releases = this.adjustReleases(d)
+              this.count = d.length
+              this.page = page
+            })
           })
-        })
-    },
-    showNext: function () {
-      this.showPage(Math.min(this.page + 1, this.getEndIndex()))
-    },
-    showEnd: function () {
-      this.showPage(this.getEndIndex())
+      }, 0)
     },
     adjustReleases: function (releases) {
       return releases.map(release => Object.assign(release, {
@@ -144,5 +107,19 @@ export default {
 }
 .repos-content {
   margin-left: 10px;
+}
+
+.release {
+  display: -webkit-flex;
+  display: flex;
+  height: 28px;
+  line-height:28px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.version {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 </style>

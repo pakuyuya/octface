@@ -7,7 +7,7 @@
       <li v-on:click="showNext" class="pagination-item cursor" v-bind:class="{ disabled: isEndPage }">&gt;</li>
       <li v-on:click="showEnd" class="pagination-item cursor" v-bind:class="{ disabled: isEndPage }">&raquo;</li>
     </ul>
-    <div class="indicator pagination-wrapper-item" v-if="count > 1">
+    <div class="indicator pagination-wrapper-item" v-if="showCounter">
       found {{ count }} entries.
     </div>
   </div>
@@ -17,7 +17,7 @@
 export default {
   name: 'Pagination',
   components: {},
-  props: ['count', 'pagesize', 'from', 'page', 'movePagewidth', 'isFirstPage', 'isEndPage'],
+  props: ['count', 'pagesize', 'from', 'page', 'movePagewidth', 'isFirstPage', 'isEndPage', 'showCounter'],
   methods: {
     getShownPages: function () {
       let crt = this.page

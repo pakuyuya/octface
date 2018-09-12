@@ -1,6 +1,8 @@
 <template>
   <div class="search">
-    <pagination :isFirstPage="isFirstPage()" :isEndPage="isEndPage()" :count="count" :page="page" :movePagewidth="movePagewidth" :pagesize="pagesize" v-on:showPage="requestShowPage" />
+    <pagination :isFirstPage="isFirstPage()" :isEndPage="isEndPage()"
+                :count="count" :page="page" :movePagewidth="movePagewidth" :pagesize="pagesize" :showCounter="true"
+                v-on:showPage="requestShowPage" />
     <div class="list">
       <div class="list-item" v-for="item in items" v-bind:key="item.id">
         <div class="list-link">
