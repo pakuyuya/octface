@@ -43,6 +43,7 @@ export default {
   },
   beforeRouteUpdate: function (to, from, next) {
     this.showPage()
+    next()
   },
   methods: {
     isFirstPage: function () {
@@ -81,33 +82,39 @@ export default {
       this.showPage(Math.max(this.page - 1, 1))
     },
     showPage: function (page) {
-      page = page || 1
-      let q = this.$route.query.q || ''
-      if (!q) {
-        return
-      }
-
-      let urlpath = '/search/repositories'
-      let params = {
-        q: q,
-        page: page
-      }
-
-      apiSV.get(urlpath, params)
-        .then((r) => {
-          this.$nextTick(() => {
-            let d = r.data
-            this.items = d.items
-            this.count = d.total_count
-            this.page = page
-          })
-        })
+      this.requestShowPage(page)
     },
     showNext: function () {
       this.showPage(Math.min(this.page + 1, this.getEndIndex()))
     },
     showEnd: function () {
       this.showPage(this.getEndIndex())
+    },
+
+    requestShowPage: function (page) {
+      setTimeout(() => {
+        page = page || 1
+        let q = this.$route.query.q || ''
+        if (!q) {
+          return
+        }
+
+        let urlpath = '/search/repositories'
+        let params = {
+          q: q,
+          page: page
+        }
+
+        apiSV.get(urlpath, params)
+          .then((r) => {
+            this.$nextTick(() => {
+              let d = r.data
+              this.items = d.items
+              this.count = d.total_count
+              this.page = page
+            })
+          })
+      }, 0)
     }
   }
 }
