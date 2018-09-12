@@ -46,27 +46,6 @@ export default {
     getEndIndex: function () {
       return ~~(this.count / this.pagesize) + 1
     },
-    getShownPages: function () {
-      let crt = this.page
-
-      let width = this.movePagewidth
-      let widthdec = width - 1
-
-      let first = crt - ~~(widthdec / 2)
-      let end = crt + ~~(widthdec / 2) + (widthdec & 1)
-
-      if (end > this.getEndIndex()) {
-        end = this.getEndIndex()
-        first = end - this.movePagewidth - 1
-      }
-      if (first < 1) {
-        first = 1
-        end = Math.min(this.getEndIndex(), this.movePagewidth)
-      }
-      width = end - first + 1
-      return Array.from(Array(width), (v, k) => k + first)
-    },
-
     requestShowPage: function (page) {
       setTimeout(() => {
         page = page || 1
