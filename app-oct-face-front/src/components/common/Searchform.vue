@@ -16,9 +16,29 @@ export default {
   },
   methods: {
     goSearch: function () {
-      this.$router.push(`/search/1?q=${encodeURI(this.text)}`)
+      let url = convertGithubUrl(this.text)
+
+      if (!url) {
+        url = `/search/1?q=${encodeURI(this.text)}`
+      }
+
+      this.$router.push(url)
     }
   }
+}
+
+function convertGithubUrl(text) {
+  let p = new RegExp('^https://github.com/([^/]+)/([^/]+)/?$')
+  if (p.test(text)) {
+    return text.replace(p, '/repos/$1/$2/contents/')
+  }
+
+  p = new RegExp('^https://github.com/([^/]+)/([^/]+)/releases/?$')
+  if (p.test(text)) {
+    return text.replace(p, '/repos/$1/$2/releases/')
+  }
+
+  return undefined
 }
 </script>
 
