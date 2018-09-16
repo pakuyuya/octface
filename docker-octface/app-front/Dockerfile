@@ -14,10 +14,10 @@ RUN apt-get install -y gnupg gnupg1 gnupg2
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
 RUN apt-get install -y nodejs npm
 
-COPY $app_root/app-oct-face-front /usr/local/app-octface-front
+COPY $app_root/app-front /usr/local/app-front
 #RUN npm install -g @vue/cli@3.0.0-beta.6
 
-WORKDIR /usr/local/app-octface-front
+WORKDIR /usr/local/app-front
 RUN npm install
 
 ENV NODE_ENV=production
@@ -27,7 +27,7 @@ RUN npm run build
 # put contents
 
 RUN mkdir -p /usr/local/nginx/html
-RUN cp -prf /usr/local/app-octface-front/dist/* /usr/local/nginx/html
+RUN cp -prf /usr/local/app-front/dist/* /usr/local/nginx/html
 RUN chown -R nginx /usr/local/nginx/html
 
 # nginx settings
