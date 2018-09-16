@@ -10,7 +10,7 @@ services:
     container_name: app-front
     restart: always
     ports:
-      - "8080:80"
+      - "8080:8080"
   app-bridge:
     build: 
       context: ../
@@ -18,8 +18,10 @@ services:
       args:
         docker_root: ./docker-octface
         app_root:    .
+    container_name: app-bridge
     ports:
       - "3000:3000"
+    restart: always
   proxy:
     image: nginx:1.15.3
     container_name: proxy
@@ -28,10 +30,11 @@ services:
       - "80:80"
     volumes: 
       - ./proxy/conf/default.conf:/etc/nginx/conf.d/default.conf
-#     -  /var/octface/nginx/htpasswd:/etc/nginx/htpasswd
-#    network_mode: "bridge"
     restart: always
     links:
       - app-front
       - app-bridge
-    
+    depends_on:
+      - app-front
+      - app-bridge
+
