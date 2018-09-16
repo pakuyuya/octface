@@ -18,7 +18,9 @@
     "cluster": "^0.7.7",
     "clusterjs": "^0.7.1",
     "config": "^2.0.1",
+    "lodash": "^4.17.11",
     "npm-config": "^0.2.0",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "uglify-js": "^3.4.9"
   }
 }
