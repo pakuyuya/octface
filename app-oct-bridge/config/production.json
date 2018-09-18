@@ -1,0 +1,4 @@
+{
+    "url_pass_api" : "https://api.github.com/",
+    "url_pass_download" : "https://codeload.github.com/"
+}
