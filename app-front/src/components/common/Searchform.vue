@@ -27,7 +27,7 @@ export default {
   }
 }
 
-function convertGithubUrl(text) {
+function convertGithubUrl (text) {
   let p = new RegExp('^https://github.com/([^/]+)/([^/]+)/?$')
   if (p.test(text)) {
     return text.replace(p, '/repos/$1/$2/contents/')
