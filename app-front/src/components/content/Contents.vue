@@ -14,6 +14,9 @@
         <div class="path">
           / {{ path }}
         </div>
+        <div class="action">
+          <a :href="urlzip" download>download zip</a>
+        </div>
       </div>
       <div class="fileview">
         <div class="message" v-if="message">{{ message }}</div>
@@ -49,6 +52,7 @@
 <script>
 import ReposLocalNav from '@/components/common/ReposLocalNav'
 import apiSV from '@/service/apiSV'
+import contentSV from '@/service/contentSV'
 
 export default {
   name: 'SourceTree',
@@ -65,6 +69,11 @@ export default {
     ref: '',
     message: ''
   }),
+  computed: {
+    urlzip: function () {
+      return contentSV.resolveUrl(`/download/${this.owner}/${this.repos}/zip/${this.ref}`)
+    }
+  },
   beforeMount: function () {
     this.applyUrledSetting(this.$route)
     this.showContent()
@@ -142,6 +151,14 @@ export default {
       return files.map((file) => (Object.assign(file, {
         icon: file.type === 'dir' ? '🗀' : '🗎'
       })))
+    },
+    downloadZip: function () {
+      const url = contentSV.resolveUrl(`/download/${this.owner}/${this.repos}/archive/${this.ref}`)
+      const a = document.createElement('a')
+      a.setAttribute('download', '')
+      a.setAttribute('href', url)
+
+      a.click()
     }
   }
 }

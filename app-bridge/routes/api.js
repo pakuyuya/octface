@@ -19,6 +19,10 @@ router.all('/*', function(req, res, next) {
   reqOpt = withForm(reqOpt, req);
 
   request(reqOpt, (error, response, body) => {
+    let h = response.headers;
+    res.set({
+      'access-control-allow-origin': h['access-control-allow-origin']
+    });
     res.json(body);
   });
 });
