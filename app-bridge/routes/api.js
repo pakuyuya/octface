@@ -18,7 +18,6 @@ router.all('/*', function(req, res, next) {
   };
   reqOpt = withForm(reqOpt, req);
 
-  //  request(reqOpt).pipe(res);
   request(reqOpt, (error, response, body) => {
     res.json(body);
   });
