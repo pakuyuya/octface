@@ -18,7 +18,27 @@ router.all(new RegExp('/download/(.*)'), function(req, res, next) {
     url : config.get('url_pass_download') + path,
   };
 
-  request(reqOpt).pipe(res)
+  request(reqOpt, (error, response, body) => {
+    const h = response.headers;
+    res.set({
+      'content-disposition': h['content-disposition'],
+      'date': h['date'],
+      'content-type': h['content-type'],
+      'content-length': h['content-length'],
+      'cache-control': h['cache-control'],
+      'access-control-allow-origin': h['access-control-allow-origin'],
+      'strict-transport-security': h['strict-transport-security'],
+      'x-frame-options': h['x-frame-options'],
+      'x-content-type-options': h['x-content-type-options'],
+      'x-xss-protection': h['x-xss-protection'],
+      'referrer-policy': h['referrer-policy'],
+      'content-security-policy': h['content-security-policy'],
+      'x-runtime-rack': h['x-runtime-rack'],
+      'vary': h['vary'],
+      'x-github-request-id': h['x-github-request-id'],
+    });
+    res.send(body);
+  });
 });
 
 // with header
