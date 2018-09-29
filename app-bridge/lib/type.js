@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   isPrimitive: function (o) {
     var type = typeof arg
     return arg == null || (type != "object" && type != "function")
@@ -15,4 +15,4 @@ export default {
       Object.keys(o)
     }
   }
-}
+};
