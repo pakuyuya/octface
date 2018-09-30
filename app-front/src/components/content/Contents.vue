@@ -20,7 +20,11 @@
         </div>
         <div class="middle-hr"></div>
         <div class="headers-item path">
-          / {{ path }}
+            <span class="bread-link">{{ owner }}</span>
+             / <span class="bread-link"><router-link :to="{path: `/repos/${owner}/${repos}/contents/`}">{{ repos }}</router-link></span>
+             <span v-for="part in pathParts" :key="part.path">
+               / <span class="bread-link"><router-link :to="{path: `/repos/${owner}/${repos}/contents/${part.path}`}">{{ part.name }}</router-link></span>
+             </span>
         </div>
       </div>
       <div class="fileview">
@@ -148,8 +152,10 @@ export default {
       }
 
       // pathParts
-      let pathParts = this.path.split('/')
-      this.pathParts = pathParts.map((v, i) => ({ name: v, path: pathParts.slice(0, i).join('/') }))
+      let path = this.path.replace(/^\//).replace(/\/$/)
+
+      let pathParts = path.split('/')
+      this.pathParts = pathParts.map((v, i) => ({ name: v, path: pathParts.slice(0, i + 1).join('/') }))
     },
     adjustFiles: function (files) {
       return files.map((file) => (Object.assign(file, {
