@@ -57,15 +57,25 @@ router.all('/repos/:owner/:repos/tags',
   ))
 );
 
-router.all('/repos/:owner/:repos/contents/*', remoteCallGenerator(req => req.originalUrl.replace(new RegExp('^/api/'), ''),
-(req, originData) => (
-  originData.map(v => ({
-    node_id: v.node_id,
-    type: v.type,
-    name: v.name,
-    path: v.path
-  }))
-)));
+router.all('/repos/:owner/:repos/contents/*',
+  remoteCallGenerator(req => req.originalUrl.replace(new RegExp('^/api/'), ''),
+    (req, originData) => 
+      ((Array.isArray(originData)) ? 
+        originData.map(v => ({
+          node_id: v.node_id,
+          type: v.type,
+          name: v.name,
+          path: v.path
+        }))
+        :
+        {
+          name: originData.name,
+          path: originData.path,
+          type: originData.type,
+          content: originData.content,
+          encoding: originData.encoding
+        })
+));
 
 router.all('/*', 
   remoteCallGenerator(req => req.originalUrl.replace(new RegExp('^/api/'), ''),
