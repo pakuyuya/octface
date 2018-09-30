@@ -71,6 +71,7 @@ router.all('/repos/:owner/:repos/contents/*',
         {
           name: originData.name,
           path: originData.path,
+          size: originData.size,
           type: originData.type,
           content: originData.content,
           encoding: originData.encoding

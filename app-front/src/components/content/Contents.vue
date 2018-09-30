@@ -44,9 +44,8 @@
             <router-link :to="{path: `/repos/${owner}/${repos}/contents/${parentPath}`}">←</router-link>
           </div>
           <div class="contentview-wrapper">
-            <div class="contentview">
-              {{ file.contentText }}
-            </div>
+            <div class="contentview-header">size: {{ file.size }} bytes</div>
+            <div class="contentview">{{ file.contentText }}</div>
           </div>
         </div>
       </div>
@@ -120,7 +119,7 @@ export default {
 
               // decode BASE64
               if (this.file.encoding === 'base64') {
-                this.file.contentText = atob(this.file.content)
+                this.file.contentText = atob(this.file.content).trim()
               }
             } else {
               this.contentType = 'dir'
@@ -256,16 +255,30 @@ export default {
   color: $textColor;
 }
 
+.contentview-wrapper {
+  border: 1px solid $sub2Color;
+  border-radius: 3px;
+}
+
 .contentview-backword {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.contentview {
-  border-left: 5px solid $sub1Color;
+.contentview-header {
+  border-radius: 3px 3px 0px 0px;
   background: $citationColor;
+  color: $disabledTextColor;
+  padding: 10px 8px;
+  font-size: 12px;
+  border-bottom: 1px solid $sub2Color;
+}
+
+.contentview {
   color: $citationTextColor;
-  padding: 20px 15px;
+  padding: 5px 8px;
+  white-space: pre;
+
   font-size: 14px;
   line-height: 28px;
   min-width: 800px;
