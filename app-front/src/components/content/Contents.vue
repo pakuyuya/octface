@@ -5,17 +5,22 @@
     </div>
     <div class="repos-content">
       <div class="headers">
-        <div class="repos">
-          {{ owner }} / {{ repos }}
+        <div class="headers-row header-row-repos">
+          <div class="headers-item repos">
+            {{ owner }} / {{ repos }}
+          </div>
         </div>
-        <div class="branch">
-          branch: {{ ref }}
+        <div class="headers-row">
+          <div class="headers-item branch">
+            branch: <span class="branch-name">{{ ref }}</span>
+          </div>
+          <div class="download headers-item action">
+            <a :href="urlzip" download>(download zip)</a>
+          </div>
         </div>
-        <div class="path">
+        <div class="middle-hr"></div>
+        <div class="headers-item path">
           / {{ path }}
-        </div>
-        <div class="action">
-          <a :href="urlzip" download>download zip</a>
         </div>
       </div>
       <div class="fileview">
@@ -165,14 +170,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.middle-hr {
+  height: 0px;
+  margin: 10px 0px;
+  border-top: 1px solid $sub2Color;
+  max-width: 580px;
+}
+
 .source-tree {
   display: -webkit-flex;
   display: flex;
 }
 .repos-content {
   margin-left: 10px;
+  width: calc(100% - 10px);
+}
+.headers {
 }
 
+.headers-row {
+  display: -webkit-flex;
+  display: flex;
+  height: 20px;
+  line-height: 20px;
+  margin-top:8px;
+  margin-bottom:8px;
+}
+
+.headers-item {
+  margin-left: 3px;
+  margin-right: 3px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.header-row-repos {
+  margin-right: 10px;
+}
 .repos {
   height: 20px;
   line-height: 20px;
@@ -180,9 +214,30 @@ export default {
 }
 
 .branch {
-  height: 20px;
-  line-height: 20px;
   font-size: 16px;
+}
+
+.branch-name {
+  color : $sub1Color;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.download {
+  font-size: 12px;
+}
+.download-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(../../assets/icon-download.png);
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  &:hover {
+    background-color: $sub1Color;
+  }
 }
 
 .path {

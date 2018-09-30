@@ -151,6 +151,7 @@ export default {
 
 .list-link {
   width: 300px;
+  min-width: 300px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
