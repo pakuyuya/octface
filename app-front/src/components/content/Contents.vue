@@ -226,19 +226,6 @@ export default {
 .download {
   font-size: 12px;
 }
-.download-icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: url(../../assets/icon-download.png);
-  background-size: 16px 16px;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  &:hover {
-    background-color: $sub1Color;
-  }
-}
 
 .path {
   height: 20px;
