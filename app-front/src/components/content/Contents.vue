@@ -258,6 +258,8 @@ export default {
 .contentview-wrapper {
   border: 1px solid $sub2Color;
   border-radius: 3px;
+  margin-right: 20px;
+  margin-bottom: 40px;
 }
 
 .contentview-backword {
